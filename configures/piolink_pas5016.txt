@@ -1,0 +1,595 @@
+Current configuration (ver 10.7.42):
+!
+configure
+hostname switch
+terminal length 30
+terminal timeout 10
+mac-ageing 300
+arp locktime 100
+gmt-difference 9
+resources-status enable
+!
+! Alias setting
+!
+!
+! Port setting
+!
+port 1 enable copper
+port 1 duplex auto copper
+port 1 speed auto copper
+port 1 mdi-mdix auto
+port 1 enable fiber
+port 1 duplex auto fiber
+port 1 speed auto fiber
+port 1 flow-ctrl off
+port 2 enable copper
+port 2 duplex auto copper
+port 2 speed auto copper
+port 2 mdi-mdix auto
+port 2 enable fiber
+port 2 duplex auto fiber
+port 2 speed auto fiber
+port 2 flow-ctrl off
+port 3 enable copper
+port 3 duplex auto copper
+port 3 speed auto copper
+port 3 mdi-mdix auto
+port 3 enable fiber
+port 3 duplex auto fiber
+port 3 speed auto fiber
+port 3 flow-ctrl off
+port 4 enable copper
+port 4 duplex auto copper
+port 4 speed auto copper
+port 4 mdi-mdix auto
+port 4 enable fiber
+port 4 duplex auto fiber
+port 4 speed auto fiber
+port 4 flow-ctrl off
+port 5 enable copper
+port 5 duplex auto copper
+port 5 speed auto copper
+port 5 mdi-mdix auto
+port 5 enable fiber
+port 5 duplex auto fiber
+port 5 speed auto fiber
+port 5 flow-ctrl off
+port 6 enable copper
+port 6 duplex auto copper
+port 6 speed auto copper
+port 6 mdi-mdix auto
+port 6 enable fiber
+port 6 duplex auto fiber
+port 6 speed auto fiber
+port 6 flow-ctrl off
+port 7 enable copper
+port 7 duplex auto copper
+port 7 speed auto copper
+port 7 mdi-mdix auto
+port 7 enable fiber
+port 7 duplex auto fiber
+port 7 speed auto fiber
+port 7 flow-ctrl off
+port 8 enable copper
+port 8 duplex auto copper
+port 8 speed auto copper
+port 8 mdi-mdix auto
+port 8 enable fiber
+port 8 duplex auto fiber
+port 8 speed auto fiber
+port 8 flow-ctrl off
+port 9 enable copper
+port 9 duplex auto copper
+port 9 speed auto copper
+port 9 mdi-mdix auto
+port 9 enable fiber
+port 9 duplex auto fiber
+port 9 speed auto fiber
+port 9 flow-ctrl off
+port 10 enable copper
+port 10 duplex auto copper
+port 10 speed auto copper
+port 10 mdi-mdix auto
+port 10 enable fiber
+port 10 duplex auto fiber
+port 10 speed auto fiber
+port 10 flow-ctrl off
+port 11 enable copper
+port 11 duplex auto copper
+port 11 speed auto copper
+port 11 mdi-mdix auto
+port 11 enable fiber
+port 11 duplex auto fiber
+port 11 speed auto fiber
+port 11 flow-ctrl off
+port 12 enable copper
+port 12 duplex auto copper
+port 12 speed auto copper
+port 12 mdi-mdix auto
+port 12 enable fiber
+port 12 duplex auto fiber
+port 12 speed auto fiber
+port 12 flow-ctrl off
+port 13 enable copper
+port 13 duplex auto copper
+port 13 speed auto copper
+port 13 mdi-mdix auto
+port 13 enable fiber
+port 13 duplex auto fiber
+port 13 speed auto fiber
+port 13 flow-ctrl off
+port 14 enable copper
+port 14 duplex auto copper
+port 14 speed auto copper
+port 14 mdi-mdix auto
+port 14 enable fiber
+port 14 duplex auto fiber
+port 14 speed auto fiber
+port 14 flow-ctrl off
+port 15 enable copper
+port 15 duplex auto copper
+port 15 speed auto copper
+port 15 mdi-mdix auto
+port 15 enable fiber
+port 15 duplex auto fiber
+port 15 speed auto fiber
+port 15 flow-ctrl off
+port 16 enable copper
+port 16 duplex auto copper
+port 16 speed auto copper
+port 16 mdi-mdix auto
+port 16 enable fiber
+port 16 duplex auto fiber
+port 16 speed auto fiber
+port 16 flow-ctrl off
+!
+! Linksync configuration
+!
+!
+! Mirroring setting
+!
+mirroring disable
+!
+! VLAN setting
+!
+vlan lan 20
+vlan lan transparent disable
+vlan lan port 2,3 untagged
+vlan pvid lan port 2
+vlan pvid lan port 3
+vlan wan 10
+vlan wan transparent disable
+vlan wan port 1 untagged
+vlan pvid wan port 1
+vlan default transparent disable
+!
+! Trunk setting
+!
+!
+! STP setting
+!
+!
+! IP route & IP DNS setting
+!
+ip address 192.168.50.98/24 interface mgmt
+ip address 192.168.50.30/32 interface lan broadcast 192.168.50.30
+ip address 192.168.50.30/24 interface wan broadcast 192.168.50.255
+ip route 192.168.50.121/32 interface lan
+ip route default gateway 192.168.50.1
+!
+! Port-boundary configuration
+!
+port-boundary 1
+  promisc off
+  include-mac none
+  protocol all
+  sip 0.0.0.0/0
+  dip 0.0.0.0/0
+  vid 10
+  boundary client
+  port 1
+  enable
+  apply
+port-boundary 2
+  promisc on
+  include-mac none
+  protocol all
+  sip 0.0.0.0/0
+  dip 0.0.0.0/0
+  vid 20
+  boundary server
+  port 2,3
+  enable
+  apply
+!
+! Port-boundary6 configuration
+!
+!
+! ARP setting
+!
+!
+! ARP filter setting
+!
+!
+! Neigh setting
+!
+!
+! NAT configuration
+!
+!
+! Logging setting
+!
+logging priority all notice
+logging buffer 100
+logging rotate 0:0
+logging server enable
+!
+! SNMP setting
+!
+snmp community public
+snmp load-timeout 60
+snmp disable
+!
+! RMON setting
+!
+!
+! RADIUS setting
+!
+radius
+  disable
+..
+!
+! TACACS+ setting
+!
+tacacs-plus
+  authentication disable
+  authorization disable
+  accounting disable
+  log disable
+  apply
+!
+! Watch-system setting
+!
+watch-system
+  disable
+  interval 1000
+  cpu
+    disable
+    threshold 95
+    apply
+  memory
+    disable
+    threshold 80
+    apply
+  apply
+!
+! Email-alarm setting
+!
+email-alarm
+  disable
+  ratelimit 60
+  no cpu
+  no memory
+  no temperature
+  no power
+  no fan
+  no packet-processor
+  no link-change
+  no failover
+  no real
+  apply
+!
+! NTP client setting
+!
+ntp
+  disable
+  interval 900
+  timeout 5
+  apply
+!
+! Healthcheck server setting
+!
+hc-server
+  ftpd
+    port 21
+    disable
+    apply
+  httpd
+    port 80
+    disable
+    apply
+  imapd
+    port 143
+    disable
+    apply
+  pop3d
+    port 110
+    disable
+    apply
+  smtpd
+    port 25
+    disable
+    apply
+  ..
+!
+! Management Access setting
+!
+management-access telnet enable
+management-access ssh enable
+!
+! Session-Timeout setting
+!
+session-timeout
+    generic  30
+    icmp  10
+    tcp-close  20
+    tcp-close-wait  20
+    tcp-established  3600
+    tcp-fin-wait  20
+    tcp-unassured  20
+    tcp-time-wait  20
+    udp  10
+    udp-stream  180
+    apply
+!
+! Session-log setting
+!
+session-log
+  disable
+  buffer 100
+  rotate 0:0
+  apply
+!
+! System environment setting
+!
+proxy-arp enable
+passive-proxy-arp enable
+compare-src-mac disable
+multicast-bridge disable
+lb-stat-status disable
+flood-rate rate 100
+flood-rate broadcast enable
+flood-rate multicast disable
+!
+! Router configuration
+!
+interface default
+  ..
+interface lan
+  ..
+interface wan
+  ..
+!
+!
+! SSL configuration
+!
+ssl
+  ..
+!
+!
+! SLB configuration
+!
+! Define SLB service 'lb'
+slb lb
+  priority 50
+  slb-session-timeout 0
+  slb-unassured-timeout 0
+  slb-close-timeout 0
+  sticky 60
+  sticky source-subnet 255.255.255.255
+  lb-method rr
+  vip 192.168.50.31
+  vport all:0
+  natmode dest-nat
+  no session-sync
+  no backup
+  fail-skip disable
+  enable
+  apply
+! Define Dynamic-Weight of SLB service 'lb'
+! Define Reals of SLB service 'lb'
+  real 1
+    name r1
+    rip 192.168.50.121
+    rport 0
+    weight 1
+    graceful-shutdown disable
+    max-connection 1000
+    enable
+    apply
+! Define Healthcheck of SLB service 'lb'
+  health 1
+    type tcp
+    timeout 3
+    interval 5
+    retry 3
+    recover 0
+    port 80
+    half-open disable
+    enable
+    apply
+  ..
+!
+!
+! Layer7 configuration
+!
+layer7
+  ..
+!
+!
+! L7SLB configuration
+!
+!
+!
+! L7CSLB configuration
+!
+!
+!
+! FWLB configuration
+!
+!
+!
+! CSLB configuration
+!
+!
+!
+! GWLB configuration
+!
+!
+!
+! Security configuration
+!
+security
+  asymmetric-filtering disable
+  log-forwarding disable
+  psm-bridge disable
+!
+! Security system configuration
+!
+  system
+!
+! Security system protection configuration
+!
+    protection
+      synflood disable
+      ipspoof disable
+      dos dead-timeout 60
+      dos alive-timeout 7200
+      dosprotect disable
+      apply
+!
+! Security system access policy configuration
+!
+    access
+      default-policy accept
+      apply
+    ..
+!
+! Security firewall configuration
+!
+  firewall
+! Security firewall content configuration
+! Security firewall content group configuration
+! Security firewall filter configuration
+! Security firewall filter group configuration
+! Security firewall policy configuration
+    ..
+!
+! Advanced security configuration
+!
+  advanced
+!
+! Security DoS protection configuration (advanced)
+!
+    dos
+      ..
+!
+! Security flood control configuration (advanced)
+!
+!
+! Security scan protection configuration (advanced)
+!
+    scan
+      portscan
+        weight 21
+        delay 300
+        highportweight 3
+        lowportweight 1
+        disable
+        ..
+      osfingerprinting disable
+      interface any
+      log disable
+      ..
+!
+! Security worm protection configuration (advanced)
+!
+    worm
+      ramen disable
+      sadmind disable
+      nimda disable
+      codered disable
+      sqlslammer disable
+      blaster disable
+      welchia disable
+      sasser1 disable
+      sasser2 disable
+      korgo disable
+      interface any
+      ..
+!
+! Security spam mail protection configuration (advanced)
+!
+    mail
+      interface any
+      searchlimit 0
+      ..
+!
+! Security e-mail worm protection configuration (advanced)
+!
+    email-worm
+      interface any
+      log disable
+      searchlimit 0
+      disable
+      ..
+!
+! Security intrusion-prevention configuration (advanced)
+!
+    intrusion-prevention
+      interface any
+      log disable
+      disable
+      ..
+    ..
+  ..
+!
+!
+!
+! QoS configuration
+!
+qos
+  disable
+  ..
+! End of QoS configuration
+!
+!
+! Network-monitoring configuration
+!
+network-monitoring
+  interval 60
+  disable
+  apply
+! Network-monitoring application configuration
+  application
+    ..
+  ..
+! End of Network-monitoring configuration
+!
+!
+! Failover configuration
+!
+failover
+! no failover daemon
+  bdr disable
+  session-sync interval 100
+  state disable
+  slave-healthcheck enable
+  track-packet-processor disable
+  track-ssl-accelerator enable
+  apply
+!
+!
+! ILB static proximity filter configuration
+!
+! Define ILB static proximity filter
+spfilter
+! Define ILB static proximity filter
+  ..
+!
+! ILB configuration
+!
+!
+! GSLB configuration
+!
+end
