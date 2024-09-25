@@ -172,8 +172,8 @@ vlan default transparent disable
 ! IP route & IP DNS setting
 !
 ip address 192.168.50.98/24 interface mgmt
-ip address 192.168.50.30/32 interface lan broadcast 192.168.50.30
-ip address 192.168.50.30/24 interface wan broadcast 192.168.50.255
+ip address 192.168.50.31/32 interface lan broadcast 192.168.50.31
+ip address 192.168.50.31/24 interface wan broadcast 192.168.50.255
 ip route 192.168.50.121/32 interface lan
 ip route default gateway 192.168.50.1
 !
@@ -378,7 +378,7 @@ slb lb
   sticky 60
   sticky source-subnet 255.255.255.255
   lb-method rr
-  vip 192.168.50.31
+  vip 192.168.50.30
   vport all:0
   natmode dest-nat
   no session-sync
