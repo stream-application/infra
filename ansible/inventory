@@ -1,0 +1,4 @@
+[controllers]
+controller1 ansible_host=192.168.50.121 ansible_user=rocky
+controller2 ansible_host=192.168.50.122 ansible_user=rocky
+controller3 ansible_host=192.168.50.123 ansible_user=rocky
