@@ -1,0 +1,154 @@
+- name: Install k8s
+  hosts: controllers
+  tasks:
+    - name: Check SELinux
+      ansible.builtin.shell:
+        cmd: getenforce
+        executable: /bin/bash
+      register: enforce
+      changed_when: false
+
+    - name: Set permissive mode
+      ansible.builtin.shell:
+        cmd: setenforce 0
+        executable: /bin/bash
+      become: true
+      changed_when: enforce.enforce.stdout != "Permissive"
+      when: enforce.stdout != "Permissive"
+
+    - name: Change SELinux mode
+      ansible.builtin.replace:
+        path: /etc/selinux/config
+        regexp: '^SELINUX=enforcing'
+        replace: 'SELINUX=permissive'
+      when: enforce.stdout != "Permissive"
+
+    - name: Check swap size
+      ansible.builtin.shell:
+        cmd: set -o pipefail && free | grep Swap | awk '{print $2}'
+        executable: /bin/bash
+      register: swap_size
+      changed_when: false
+
+    - name: Comment swap from fstab
+      ansible.builtin.replace:
+        path: /etc/fstab
+        regexp: '^(?!#)(.*\bswap\b.*)'
+        replace: '# \1'
+      when: swap_size.stdout != "0"
+
+    - name: Disable swap
+      ansible.builtin.shell:
+        cmd: swapoff -a
+        executable: /bin/bash
+      changed_when: swap_size.stdout != "0"
+      when: swap_size.stdout != "0"
+
+    - name: Create kernel module
+      ansible.builtin.blockinfile:
+        path: /etc/modules-load.d/k8s.conf
+        block: |
+          overlay
+          br_netfilter
+        create: yes
+        mode: 0644
+
+    - name: Configure sysctl
+      ansible.posix.sysctl:
+        name: "{{ item }}"
+        sysctl_file: /etc/sysctl.d/k8s.conf
+        value: '1'
+        reload: yes
+        
+      loop:
+        - net.ipv4.ip_forward
+        # - net.bridge.bridge-nf-call-iptables
+        # - net.bridge.bridge-nf-call-ip6tables
+
+    - name: Add Docker CE repo
+      ansible.builtin.yum_repository:
+        name: Docker
+        baseurl: https://download.docker.com/linux/centos/$releasever/$basearch/stable
+        description: Docker CE repository
+        enabled: 1
+        gpgcheck: 1
+        gpgkey:
+          - https://download.docker.com/linux/centos/gpg
+
+    - name: Install Containerd
+      ansible.builtin.dnf:
+        name:
+          - containerd.io
+
+    - name: Install achrive packages
+      ansible.builtin.dnf:
+        name:
+          - tar
+          - gzip
+
+    - name: Create CNI directory
+      ansible.builtin.file:
+        path: /opt/cin/bin
+        state: directory
+        mode: 0755
+
+    - name: Download CNI plugin
+      ansible.builtin.get_url:
+        url: https://github.com/containernetworking/plugins/releases/download/v1.5.1/cni-plugins-linux-amd64-v1.5.1.tgz
+        dest: /tmp/cni-plugins-v1.5.1.tgz
+        mode: 0644
+    
+    - name: Extract CNI plugin
+      ansible.builtin.unarchive:
+        src: /tmp/cni-plugins-v1.5.1.tgz
+        dest: /opt/cin/bin
+        remote_src: yes
+    
+    - name: Confiugre cgroup driver
+      ansible.builtin.shell:
+        cmd: containerd config default | tee /etc/containerd/config.toml
+        executable: /bin/bash
+      become: true
+    
+    - name: Enable cgroup driver
+      ansible.builtin.replace:
+        path: /etc/containerd/config.toml
+        regexp: 'SystemdCgroup = false'
+        replace: 'SystemdCgroup = true'
+
+    - name: Enable containerd
+      ansible.builtin.systemd:
+        name: containerd
+        state: started
+        enabled: true
+
+    - name: Add Kubernetes repo
+      ansible.builtin.yum_repository:
+        name: kubernetes
+        baseurl:
+          - https://pkgs.k8s.io/core:/stable:/v1.31/rpm/
+        description: kubernetes
+        enabled: 1
+        gpgcheck: 1
+        gpgkey:
+          - https://pkgs.k8s.io/core:/stable:/v1.31/rpm/repodata/repomd.xml.key
+        exclude:
+          - kubelet
+          - kubeadm
+          - kubectl
+          - cri-tools
+          - kubernetes-cni
+
+    - name: Install Kubernetes
+      ansible.builtin.dnf:
+        name:
+          - kubelet
+          - kubeadm
+          - kubectl
+        disable_excludes: kubernetes
+
+    - name: Enable kubernetes
+      ansible.builtin.systemd:
+        name: kubelet
+        state: started
+        enabled: true
